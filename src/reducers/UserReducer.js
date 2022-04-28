@@ -1,4 +1,3 @@
-import {setUser} from '../actions/actions.js'; 
 import {ACTION_TYPE} from '../actions/global'
 
 const initalState = {

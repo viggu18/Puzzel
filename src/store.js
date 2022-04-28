@@ -2,7 +2,7 @@ import { createStore,combineReducers } from "redux";
 import globalReducer from "./reducers/UserReducer";
 
 const rootReducer = combineReducers({
-    user: globalReducer
+    globalStore: globalReducer
 });
 
 const userStore = () => createStore(rootReducer);

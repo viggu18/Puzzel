@@ -39,13 +39,13 @@ export default function Profile({navigation}) {
   const [phoneNumber,setPhoneNumber] = useState('');
   const [edit,setEdit] = useState(true);  //true means edit mode is on
 
-  const user = useSelector(state => state.user.USER)
+  const userS = useSelector(state => state.globalStore.USER)
   console.log("this is from profile")
-  console.log(user)
+  console.log(userS)
   console.log("This is profile")
 
-// const user = firebase.auth().currentUser;
-// console.log(user)
+const user = firebase.auth().currentUser;
+console.log(user)
 if(user !== null){
   // The user object has basic properties such as display name, email, etc.
   const displayName = user.displayName;

@@ -12,21 +12,25 @@ import firebase from "../../firebase";
 import HeaderButtons from "../HeaderButtons";
 import { useSelector,useDispatch } from "react-redux"; 
 import { ACTION_TYPE } from "../../src/actions/global";
+import { saveUser } from "../../src/actions/actions";
 
 export default function Login({ navigation }) {
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
+    
     const handleSignIn = () => {
+        email && password == "" ? setErrorMessage("Please enter email and password") 
+        : email == "" ? setErrorMessage("Please enter valid email address") 
+        : password == "" ? setErrorMessage("Please enter a valid password") :
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(() => {
             return firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                 console.log("signed in with ",email);
                 const user = userCredential.user; 
-                dispatch({type: ACTION_TYPE.SAVE_USER_DATA, payload: user});
+                dispatch(saveUser(user));
                 navigation.navigate('Profile');
                 })
                 .catch((error) => {
@@ -41,6 +45,7 @@ export default function Login({ navigation }) {
                     console.log(errorCode,errorMessage);
                     setErrorMessage(error.message)
         });
+    
 
 
 

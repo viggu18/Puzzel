@@ -26,7 +26,7 @@ export default function SelectUser({navigation}) {
       });
 
     const handlePress = (props) => {
-        props == 'expert' ? navigation.navigate('Tabs') : props == 'noob' ? navigation.navigate('Tabs') : <></> 
+        props == 'expert' ? navigation.navigate('PhoneList') : props == 'noob' ? navigation.navigate('PhoneList') : <></> 
     }
     return(
         <View>
