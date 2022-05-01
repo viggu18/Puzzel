@@ -13,6 +13,7 @@ import PhoneDetails from './screens/PhoneDetails';
 import NullProfile from './components/Profile/NullProfile';
 import FullDetails from './components/PhoneDetails/FulllDetails';
 import Cart from './screens/Cart';
+import EditProfile from './components/Profile/EditProfile';
 
 
 export default function RootNavigation() {
@@ -20,8 +21,7 @@ const Stack = createNativeStackNavigator();
 const screenOptions={headerShown: false,};
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home' screenOptions={screenOptions}>
-        <Stack.Screen name='NullProfile' component={NullProfile}/>
+      <Stack.Navigator initialRouteName='PhoneList' screenOptions={screenOptions}>
         <Stack.Screen name='Home' component={Home}/>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Profile" component={Profile} />
@@ -32,6 +32,8 @@ const screenOptions={headerShown: false,};
         <Stack.Screen name='PhoneDetails' component={PhoneDetails}/>
         <Stack.Screen name='FullDetails' component={FullDetails} />
         <Stack.Screen name='Cart' component={Cart} />
+        <Stack.Screen name='EditProfile' component={EditProfile} />
+        <Stack.Screen name='AddToFirebase' component={AddToFirebase} />
       </Stack.Navigator>
     </NavigationContainer>
   );

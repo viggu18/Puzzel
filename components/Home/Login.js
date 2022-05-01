@@ -20,6 +20,10 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     
+        // const user = firebase.auth().currentUser;
+        // console.log(user);
+        // user ? navigation.navigate("PhoneList") : '';
+    
     const handleSignIn = () => {
         email && password == "" ? setErrorMessage("Please enter email and password") 
         : email == "" ? setErrorMessage("Please enter valid email address") 
@@ -30,7 +34,7 @@ export default function Login({ navigation }) {
                 .then((userCredential) => {
                 console.log("signed in with ",email);
                 const user = userCredential.user; 
-                dispatch(saveUser(user));
+                dispatch({type:userCredential, payload:user});
                 navigation.navigate('Profile');
                 })
                 .catch((error) => {

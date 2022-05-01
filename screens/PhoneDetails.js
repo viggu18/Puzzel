@@ -15,6 +15,10 @@ export default function PhoneDetails({route,navigation}){
   {Object.values(route.params.Image).map((value) => (
     image.push(value)
   ))}
+
+  const SendToCart = () => {
+    navigation.navigate('Cart',data);
+  }
   return (
     <View style={{flex:1}}>
     <HeaderButtons title={data.Name} navigation={navigation} cartVisibility={true}/>
@@ -26,10 +30,15 @@ export default function PhoneDetails({route,navigation}){
         <Button title="Customise" style={style.button} onPress={() => navigation.navigate('Tabs',data)}/>
       </ScrollView>
       <View style={{flexDirection:'row'}}>
-          <TouchableOpacity style={style.bottomButtonsAddtoCart} activeOpacity={0.7}> 
+          <TouchableOpacity 
+            style={style.bottomButtonsAddtoCart} 
+            activeOpacity={0.7}> 
               <Text style={{color:'black',fontWeight:'bold'}}>Add to Cart</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={style.bottomButtonsBuyNow} activeOpacity={0.7}> 
+          <TouchableOpacity 
+            style={style.bottomButtonsBuyNow} 
+            activeOpacity={0.7}
+            onPress={SendToCart}> 
               <Text style={{color:'white',fontWeight:'bold'}}>Buy Now</Text>
           </TouchableOpacity>
       </View>

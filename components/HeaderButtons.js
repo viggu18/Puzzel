@@ -1,15 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity,Dimensions } from 'react-native'
 import React from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import {Ionicons,FontAwesome5} from 'react-native-vector-icons'
 
 const windowWidth = Dimensions.get('window').width;
 
 
 const HeaderButtons = (props) => {
     const back = () =>{
-        // props.navigation.pop();
         if(props.navigation.canGoBack()) {
-            console.log("going back")
             props.navigation.goBack();
           }
     }
@@ -29,6 +27,11 @@ const HeaderButtons = (props) => {
         <View style={style.cart}>
         {props.cartVisibility ? (<TouchableOpacity onPress={() => props.navigation.navigate('Cart')} style={{right:0,position: 'absolute'}}>
             <Ionicons name="cart-sharp" size={32} color="black" style={{margin:10}}/>
+        </TouchableOpacity>): <></>}
+        </View>
+        <View style={style.cart}>
+        {props.editButton ? (<TouchableOpacity onPress={() => props.navigation.navigate('EditProfile')} style={{right:0,position: 'absolute'}}>
+            <FontAwesome5 name="user-edit" size={28} color="black" style={{margin:10}}/>
         </TouchableOpacity>): <></>}
         </View>
     </View>

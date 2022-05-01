@@ -6,13 +6,13 @@ import { Button } from '@react-native-material/core'
 import ViewCart from '../components/Cart/ViewCart'
 import {windowWidth, windowHeight} from '../components/export'
 
-export default function Cart({navigation}) {
+export default function Cart({route,navigation}) {
   const buttonHandler = () => {
     navigation.navigate('PhoneList')
   }
   return (
     <>
-    {true ? (
+    {!route.params ? (
     <View style={{flex:1,backgroundColor:'white'}}>
                 <HeaderButtons title={"Cart"} navigation={navigation} backButton={true}/>   
                 <EmptyCart navigation={navigation}/>
@@ -20,7 +20,7 @@ export default function Cart({navigation}) {
                 </View> )
     : (<>
       <HeaderButtons title={"Cart"} navigation={navigation}/>
-      <ViewCart navigation={navigation}/> 
+      <ViewCart navigation={navigation} data={route.params}/> 
       </>)
   }
   </>

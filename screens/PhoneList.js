@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'rea
 import React from 'react'
 import { Divider } from "@react-native-material/core";
 import HeaderButtons from '../components/HeaderButtons';
+import firebase from '../firebase';
+const db = firebase.firestore();
 
 export const Phones = [
     {
@@ -142,13 +144,31 @@ export const Phones = [
         Rating: '2.5'
         },
 ];
+        
 
 export default function PhoneList({navigation}){
+    const [err,setErr] = React.useState(false);
+    
+    const docRef = db.collection("stock_phones").doc("2ahRYGxOlxOy2wE0wRRV");
+    docRef.get().then((doc) => {
+    if (doc.exists) {
+        console.log(doc.data());
+        return doc.data().Phone;
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+    }).catch((error) => {
+    console.log("Error getting document:", error);
+    setErr(error);
+    });
+
+    const user = firebase.auth().currentUser;
+    console.log(user);
+
   return (
     <>
-    <View>
-        <Text style={S.title}>P U Z Z E L</Text>
-    </View>
+    <HeaderButtons title="P U Z Z E L" backButton={false} cartVisibility={true} navigation={navigation}/> 
     <ScrollView showsVerticalScrollIndicator={false}>
     {Phones.map((Phone,index)=> (
     <View key={index}>
@@ -182,12 +202,6 @@ const PhoneInfo = (props) => (
 );
 
 const S = StyleSheet.create({
-    title: {
-        alignSelf: 'center',
-        fontWeight: 'bold',
-        fontSize: 30,
-        marginTop: 10,
-    },
     image: {
         marginTop:4,
         width: 140, 
