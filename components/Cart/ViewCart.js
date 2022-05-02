@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 import React from 'react'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Items from './Items'
-import { Button } from '@react-native-material/core'
 
 export default function ViewCart(props) {
   return (
     <View style={styles.container}>  
       <Items data={props.data}/>
         <TouchableOpacity style={styles.checkoutbtn} activeOpacity={0.7}>
-          <Text style={{margin:10,fontSize:25}}>-></Text>
+          <FontAwesome name="arrow-right" size={25} color="black" style={{top:16}}/>
         </TouchableOpacity>
     </View>
   )
