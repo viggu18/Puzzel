@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react'
 import SwitchSelector from 'react-native-switch-selector'
+import SelectBox from 'react-native-multi-selectbox'
 
 const options = [
   { label: "Amoled", value: "1" },
@@ -9,9 +10,35 @@ const options = [
   { label: "LCD", value: "4" },
 ];
 
+const K_OPTIONS = [
+  {
+    item: 'Juventus',
+    id: 'JUVE',
+  },
+  {
+    item: 'Real Madrid',
+    id: 'RM',
+  },
+  {
+    item: 'Barcelona',
+    id: 'BR',
+  },
+]
+
 const Display = () => {
+  const [selectedValue, setSelectedValue] = useState(K_OPTIONS[0].item);
+
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
+      <SelectBox
+        label="Select Provider"
+        containerStyle={styles.dropDown}
+        labelStyle={{alignSelf: 'center'}}
+        options={K_OPTIONS}
+        value={selectedValue}
+        onChange={(val)=>setSelectedValue(val)}
+        hideInputFilter={true}
+      />
       <SwitchSelector
       options={options}
       initial={0}
@@ -22,14 +49,14 @@ const Display = () => {
       buttonColor='black'
       borderColor='black'
       borderRadius={0}
-       style={style.selector}/>
+       style={styles.selector}/>
     </View>
   )
 }
 
 export default Display
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
@@ -37,5 +64,10 @@ const style = StyleSheet.create({
       width: 300,
       alignSelf: 'center',
       marginTop: 20,
+    },
+    dropDown: {
+      width: 300,
+      alignSelf: 'center',
+
     }
   })

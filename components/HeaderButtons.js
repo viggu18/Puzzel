@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity,Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import {Ionicons,FontAwesome5} from 'react-native-vector-icons'
 
-const windowWidth = Dimensions.get('window').width;
-
+import { windowHeight,windowWidth } from './export'
 
 const HeaderButtons = (props) => {
     const back = () =>{
@@ -25,12 +24,15 @@ const HeaderButtons = (props) => {
         </View>
 
         <View style={style.cart}>
-        {props.cartVisibility ? (<TouchableOpacity onPress={() => props.navigation.navigate('Cart')} style={{right:0,position: 'absolute'}}>
+        {props.cartVisibility ? (
+        <TouchableOpacity onPress={() => props.navigation.navigate('CartNav')}>
             <Ionicons name="cart-sharp" size={32} color="black" style={{margin:10}}/>
         </TouchableOpacity>): <></>}
         </View>
+
         <View style={style.cart}>
-        {props.editButton ? (<TouchableOpacity onPress={() => props.navigation.navigate('EditProfile')} style={{right:0,position: 'absolute'}}>
+        {props.editButton ? (
+        <TouchableOpacity onPress={() => props.navigation.navigate('EditProfile')}>
             <FontAwesome5 name="user-edit" size={28} color="black" style={{margin:10}}/>
         </TouchableOpacity>): <></>}
         </View>
@@ -44,14 +46,14 @@ export default HeaderButtons
 const style = StyleSheet.create({
     HeaderContainer: {
         width: windowWidth,
-        height: 50,
+        height: windowHeight*0.07,
         backgroundColor:'white',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
     HeaderTitle: {
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: 'bold',
         color: 'black',
         // justifyContent: 'center',
@@ -67,7 +69,6 @@ const style = StyleSheet.create({
     },
     cart: {
         right:0,
-        top: 0,
         position: 'absolute',
     }
 })

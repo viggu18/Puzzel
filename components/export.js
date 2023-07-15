@@ -1,4 +1,9 @@
 import { Dimensions } from "react-native";
+import firebase from '../firebase';
+
+const db = firebase.firestore();
+
+export const user = firebase.auth().currentUser;
 
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;

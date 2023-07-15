@@ -13,7 +13,7 @@ export default function Bill(props){
         <View style={styles.BillBody}>
             <View style={styles.BillBodyItem}>
                 <Text style={styles.titleText}>Subtotal: </Text>
-                <Text style={styles.BillBodyItemText}>₹7000</Text>
+                <Text style={styles.BillBodyItemText}>₹{props.cartValue}</Text>
             </View>
         </View>
         <View style={styles.BillBody}>
@@ -37,7 +37,7 @@ export default function Bill(props){
         <Divider />
         <View style={styles.BillHeader}> 
             <Text style={[styles.titleText,{marginLeft: '4%'}]}>Total: </Text>
-            <Text style={[styles.BillBodyItemText,{marginRight: '5%'}]}>₹7000</Text>
+            <Text style={[styles.BillBodyItemText,{marginRight: '5%'}]}>₹{props.cartValue + 100}</Text>
         </View>
     </View>
   )

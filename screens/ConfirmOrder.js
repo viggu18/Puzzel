@@ -1,59 +1,80 @@
-import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import React,{useEffect, useState} from 'react'
 import HeaderButtons from '../components/HeaderButtons'
 import Items from '../components/Cart/Items'
 import AddressBox from '../components/AddressBox'
+import firebase from '../firebase'
+import BufferScreen from '../components/BufferScreen'
+import Bill from '../components/Cart/Bill'
+import BottomBar from '../components/BottomBar'
+import CustomItem from '../components/Cart/CustomItem'
 
-const data = {
-  "data" :{
-    "BackCamera": "48 MP,(wide) 8 MP(telephoto) 13 MP(ultrawide)",
-    "Battery": "4000mAh",
-    "Chipset": "Qualcomm Snapdragon 730",
-    "Colors": "Carbon black, Red flame, Glacier blue, Pearl White",
-    "Display": "Super Amoled HDR, 1080 x 2340 pixels, 19.5:6",
-    "FrontCamera": "Motorized pop-up 20 MP, f/2.2, (wide), 1/3.4\", 0.8µm",
-    "Glass": "Gorilla Glass 5",
-    "Gpu": "Adreno 618",
-    "Image": {
-      "img1": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-k20pro-5.jpg",
-      "img2": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-k20pro-6.jpg",
-      "img3": "https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-k20pro-7.jpg",
-    },
-    "LaunchDate": "2019, May",
-    "Memory": {
-      "option1": "6GB",
-      "option2": "8GB",
-      "option3": "12GB",
-    },
-    "Name": "Xioami Redmi K20",
-    "Network": "GSM/HSPA/LTE",
-    "Os": "Android 9.0 Upgradable to Android 11",
-    "Price": "18999",
-    "Rating": "4.7",
-    "Sound": "Loudspeaker:      Yes 3.5mm jack: Yes",
-    "Storage": {
-      "option1": "64GB",
-      "option2": "128GB",
-      "option3": "256GB",
-      "option4": "512GB",
-    },
-    "Weight": "191g",
-  },
-  "storageSelection":{
-    "Memory": "6GB",
-    "Storage": "64GB",
-  },
-}
+const db = firebase.firestore();
 export default function ConfirmOrder({route,navigation}){
   console.log(route.params)
+  const [Phones,setPhones] = useState([])
+  const [isLoading,setIsLoading] = useState(true)
+  const [cartTotal,setCartTotal] = useState(0);
+
+  const user = firebase.auth().currentUser;
+
+  const getCart = async () => {
+    const docRef = db.collection("users/"+user.email+"/cart");
+    await docRef.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+            Phones.push(doc.data());
+      });
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error);
+  });
+  setIsLoading(false);
+}
+  Phones[0] == null ? getCart(): ''
+
+  const getCartTotal= async() => {
+    var cartT = 0;
+    Phones.map((item) => {
+      item.Price ? 
+      cartT += parseInt(item.Price) : cartT += item.data.Price
+    })
+    return cartT;
+  }
+
+
+    getCartTotal().then((result)=>{
+      setCartTotal(result)
+      console.log(result)
+    })
+
+  
+
+
+  console.log(Phones)
   return (
-    <View>
+    <View style={style.ConfirmOrder}>
         <HeaderButtons title='Confirm Order' navigation={navigation}/>
-        <ScrollView>
-            <Items data={data} display={true}/>
-            {/* <AddressBox address={route.params} addressDisplay={true}/> */}
+        {isLoading ? ( <BufferScreen /> ) : (<>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {Phones.map((item,index)=>(
+            // <Items key={index} data={item} display={true}/>
+            !item.componentPosition?
+            (<Items key={index} data={item} display/>):
+            (<CustomItem key={index} data={item} display/>)
+          ))}
+            <AddressBox address={route.params} addressDisplay={true}/>
+            <Bill cartValue={cartTotal}/>
         </ScrollView>
+        <BottomBar title={'Pay ₹'+ cartTotal} navigation={navigation} CallingPage='ConfirmOrder' routeData={route.params}/>
+        </>
+        )}
     </View>
   )
 }
 
+const style = StyleSheet.create({
+  ConfirmOrder: {
+    flex: 1
+  }
+})

@@ -1,27 +1,60 @@
 import { View, Text,TouchableOpacity,StyleSheet,Image } from 'react-native'
-import React,{useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React,{useEffect, useState} from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { windowHeight, windowWidth } from '../../components/export'
 import Button from '../../components/CustomizationTabs/Button'
 import HeaderButtons from '../../components/HeaderButtons'
 import {useDispatch,useSelector} from 'react-redux'
+import { setDevice } from './components/DataHandler'
 
 export default function SelectDisplay({navigation}){
-    const [selected,setSelected] = useState('')
-    const dispatch = useDispatch()
+    const [selected,setSelected] = useState({
+        component: 'DisplaySize',
+        DisplaySize: '',
+        Price:''
+    })
+    console.log(selected)
+
+    const getDevice = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('custom-device')
+          console.log(jsonValue)
+          return jsonValue != null ? JSON.parse(jsonValue) : null
+        } catch(e) {
+            console.log(e)
+        }
+        console.log('Done.')
+      }
+
+      const saveDevice = () => {
+        setDevice(selected,'componentPosition')
+        navigation.navigate('FrontCamera')
+      }
+
+
+
+      useEffect(() => {
+        getDevice().then((data)=>
+         data != null ? setSelected({...selected, ['displaySize']: data.displaySize}): ''
+        )
+      }, [])
+      
+      
 
     const SizeOptions = (props) => (
-        <View style={[styles.SizeOptions,selected == props.sizeName ? styles.selectedSize: '']}>
-            <TouchableOpacity activeOpacity={0.6} onPress={()=>setSelected(props.sizeName)}>
+        <View style={[styles.SizeOptions,selected['DisplaySize'] == props.sizeName ? styles.selectedSize: '']}>
+            <TouchableOpacity activeOpacity={0.6} onPress={()=>setSelected({...selected, ['DisplaySize']:props.sizeName,['Price']:props.price})}>
                 {props.type == 'small' ?(
                 <Image source={require('../../assets/images/displaySize/small.png')} 
-                style={{height: windowHeight * 0.4,width: windowWidth*0.6,}} resizeMode='contain'/>):
+                style={styles.SizeImage} resizeMode='contain'/>):
                 props.type == 'mid' ?(
                 <Image source={require('../../assets/images/displaySize/mid.png')} 
                 style={styles.SizeImage} resizeMode='contain'/>):
                 props.type == 'large' ?(
                 <Image source={require('../../assets/images/displaySize/large.png')} style={styles.SizeImage} resizeMode='contain'/>): (<></>)}
                 <Text style={styles.SizeTitle}>{props.sizeName}</Text>
+                <Text style={styles.priceText}>Price: {props.price}</Text>
             </TouchableOpacity>
         </View>
     )
@@ -34,12 +67,20 @@ export default function SelectDisplay({navigation}){
         </View>
         <View style={styles.sizeScroller}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}> 
-            <SizeOptions sizeName='S 4.7inch' type='mid'/>
-            <SizeOptions sizeName='M 5.5inch' type='mid'/>
-            <SizeOptions sizeName='L 6.5inch' type='large'/>
+            <SizeOptions sizeName='S 4.7inch' type='small' price={2000}/>
+            <SizeOptions sizeName='M 5.5inch' type='mid' price={4000}/>
+            <SizeOptions sizeName='L 6.5inch' type='large' price={6000}/>
         </ScrollView>
         </View>
-        <Button navigation={navigation} screen={'FrontCamera'} title='Lets Gooo'/>
+        {/* <Button navigation={navigation} handler={setDevice} screen={'FrontCamera'} title='Lets Gooo'/> */}
+        <TouchableOpacity 
+            onPress={saveDevice} 
+            style={styles.ButtonContainer}
+            activeOpacity={0.7}>
+            <View> 
+                <Text style={styles.ButtonText}>Lets Gooo</Text>
+            </View>
+        </TouchableOpacity>
     </View>
   )
 }
@@ -92,5 +133,24 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginLeft: '6%',
+    },
+    ButtonContainer: {
+        width: windowWidth*0.25,
+        height: '8%',
+        borderRadius: 20,
+        backgroundColor: '#A0A0A0',
+        position: 'absolute',
+        bottom: '5%',
+        right: '5%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    ButtonText: {
+        fontSize: 15,
+        fontWeight: '700',
+    },
+    priceText:{
+        alignSelf: 'center',
+        fontWeight:'bold'
     }
 })

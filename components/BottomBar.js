@@ -6,6 +6,8 @@ export default function BottomBar(props){
     const buttonHandler = () => {
         if(props.CallingPage  == 'cart'){
         props.navigation.navigate('AddressSelection')
+        }else if(props.CallingPage == 'ConfirmOrder'){
+          props.navigation.navigate('Payment',props.routeData)
     }else if(props.selectedAddress == ''){
         ToastAndroid.show('Please select an address',ToastAndroid.SHORT);
         }else{
@@ -18,10 +20,10 @@ export default function BottomBar(props){
     <View style={style.BottomBar}>
     {props.message ?( 
     <View style={style.finalCartTextHolder}>
-      <Text style={style.finalCartText}>Your Cart Total is: 7000 💵</Text>
+      <Text style={style.finalCartText}>Your Cart Total is: ₹{props.cartValue+100}</Text>
     </View>): (<></>)
     }
-      <TouchableOpacity style={style.confirmButton} onPress={buttonHandler}>
+      <TouchableOpacity style={style.confirmButton} onPress={!props.handler ? buttonHandler : props.handler}>
           <Text style={style.ButtonText}>{props.title}</Text>
       </TouchableOpacity>
     </View>
@@ -48,7 +50,7 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'orange',
         height: windowHeight*0.05,
-        width: windowWidth* 0.3,
+        width: 'auto',
         alignItems: 'center',
         position:'absolute',
         right: windowWidth * 0.05,
@@ -59,5 +61,7 @@ const style = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700',
         color: "white",
+        marginLeft: 12,
+        marginRight: 12,
     }
 })

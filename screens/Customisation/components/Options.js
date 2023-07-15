@@ -6,7 +6,7 @@ const Options = (props) => {
 
     const handleSelection = (item) =>{
         props.setState(item.position)
-        props.setItem({...props.item, position: item.label})
+        props.setItem({...props.item, label: item.label})
     }
     
     let length = props.options.length
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     Text: {
-        fontSize: 15,
+        fontSize: 13,
         fontWeight: 'bold',
         alignSelf: 'center',
     }

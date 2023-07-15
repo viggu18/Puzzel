@@ -23,10 +23,10 @@ export default function ProfileUserLogin({ navigation }) {
     </TouchableOpacity>
     <Text style={style.detail}>Profile and User Details will be visible after login</Text>
       <View style={style.detailContainer}>
-          <TouchableOpacity style={style.button1} onPress={()=>ButtonHandler(1)}>
+          <TouchableOpacity style={[style.button,{left: 60}]} onPress={()=>ButtonHandler(1)}>
             <Text>Login</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={style.button2} onPress={()=>ButtonHandler(2)}>
+          <TouchableOpacity style={[style.button,{right:60}]} onPress={()=>ButtonHandler(2)}>
             <Text>Signup</Text>
           </TouchableOpacity>
       </View>
@@ -43,7 +43,7 @@ const style = StyleSheet.create({
   },
   container: {
       flex: 1,
-      backgroundColor: '#BEBCBA',
+      backgroundColor: 'white',
       alignItems: 'center'
   },
   detail: {
@@ -60,26 +60,14 @@ const style = StyleSheet.create({
   text: {
     marginRight: 200,
   },
-  button1: {
+  button: {
     width: '30%',
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'grey',
     borderRadius: 10,
     position: 'absolute',
     bottom: 300,
-    left: 60,
-  },
-  button2: {
-    width: '30%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    position: 'absolute',
-    bottom: 300,
-    right: 60,
   },
 })

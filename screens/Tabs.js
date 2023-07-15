@@ -8,20 +8,26 @@ import RAM from '../components/CustomizationTabs/RAM';
 import Fingerprint from '../components/CustomizationTabs/Fingerprint';
 import PowerButton from '../components/CustomizationTabs/PowerButton';
 import FrontCamera from '../components/CustomizationTabs/FrontCamera';
+import Speaker from '../components/CustomizationTabs/Speaker';
+import Charging from '../components/CustomizationTabs/Charging';
+import Volume from '../components/CustomizationTabs/Volume';
 
 
 export default function Tabs({route,navigation}){
     const [activeTab,setActiveTab] = useState("Display");
-    const [activeTabComponent,setActiveTabComponent] = useState(<Display/>);
+    const [activeTabComponent,setActiveTabComponent] = useState(<Camera/>);
 
 
-    let data = route.params;
+    let data = '';
     let image = [];
-    {console.log(data)}
-    {Object.values(route.params.Image).map((value) => (
-            image.push(value)
-        ))}
+    // route.params != null ? data = route.params : '';
+    // {console.log(data)}
+    // {if(data!= null){
+    //     Object.values(route.params.Image).map((value) => (
+    //         image.push(value)
+    // ))}}
   
+
 
     const TabOption = (props) => {
         const pressHandler =() =>{
@@ -45,14 +51,19 @@ export default function Tabs({route,navigation}){
         <ImageScroll image={image}/>
         {activeTab === activeTab ? activeTabComponent 
         : (<Text>Unexpected Error!. Close the app and watch some TV. We're fixing it for your</Text>)}
+        <TouchableOpacity style={style.naviHolder} 
+            onPress={()=>navigation.navigate('MiscOptions')}>
+            <Text style={style.navigator}>Want More</Text>
+        </TouchableOpacity>
         <View style={style.buttons}>
         <ScrollView horizontal={true} style={style.buttonScroller} showsHorizontalScrollIndicator={false}>
-            <TabOption text="Display" activeTab={activeTab} setActiveTab={setActiveTab} component={<Display/>}/>
             <TabOption text="Camera" activeTab={activeTab} setActiveTab={setActiveTab} component={<Camera/>}/> 
-            <TabOption text="RAM" activeTab={activeTab} setActiveTab={setActiveTab} component={<RAM/>}/>
             <TabOption text="Fingerprint" activeTab={activeTab} setActiveTab={setActiveTab} component={<Fingerprint/>}/> 
             <TabOption text="Power Button" activeTab={activeTab} setActiveTab={setActiveTab} component={<PowerButton/>}/>
-            <TabOption text="Front Camera" activeTab={activeTab} setActiveTab={setActiveTab} component={<FrontCamera/>}/> 
+            <TabOption text="Front Camera" activeTab={activeTab} setActiveTab={setActiveTab} component={<FrontCamera/>}/>
+            <TabOption text="Speaker" activeTab={activeTab} setActiveTab={setActiveTab} component={<Speaker/>}/> 
+            <TabOption text="Charging Port" activeTab={activeTab} setActiveTab={setActiveTab} component={<Charging/>}/>
+            <TabOption text="Volume" activeTab={activeTab} setActiveTab={setActiveTab} component={<Volume/>}/>  
         </ScrollView>
         </View>
         </View>
@@ -78,5 +89,17 @@ const style = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    naviHolder: {
+        position: 'absolute',
+        bottom: '8%',
+        right: '8%',
+        backgroundColor: 'grey',
+        width: '25%',
+        height: '6%',
+        borderRadius: 20,
+        elevation: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });

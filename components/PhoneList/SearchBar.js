@@ -3,29 +3,29 @@ import {View, Text, SafeAreaView, StyleSheet,TextInput, TouchableOpacity } from 
 import { windowHeight,windowWidth } from '../export'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import SpeechToText from 'react-native-google-speech-to-text';
+// import SpeechToText from 'react-native-google-speech-to-text';
 
 export default function SearchBar(props){
 
-    const speechToTextHandler = async () => {
-    let speechToTextData = null;
-            try {
-                speechToTextData = await SpeechToText.startSpeech('Try saying something', 'en_IN');
-                console.log('speechToTextData: ', speechToTextData);
+    // const speechToTextHandler = async () => {
+    // let speechToTextData = null;
+    //         try {
+    //             speechToTextData = await SpeechToText.startSpeech('Try saying something', 'en_IN');
+    //             console.log('speechToTextData: ', speechToTextData);
      
-            } catch (error) {
-                console.log('error: ', error);
-            }
-    }
+    //         } catch (error) {
+    //             console.log('error: ', error);
+    //         }
+    // }
     
 
     return(
         <View style={style.searchBarContainer}>
             <View style={style.searchBar}>
-                <TextInput placeholder='Search' style={style.TextInput} onChangeText={(text)=>{props.setSearchKey(text),props.searchHandler()}}/>
-                <TouchableOpacity style={style.mic} onPress={speechToTextHandler}>
+                <TextInput placeholder='Search' style={style.TextInput} onChangeText={(text)=>{props.setSearchKey(text)}}/>
+                {/* <TouchableOpacity style={style.mic} onPress={speechToTextHandler}>
                     <Ionicons name="mic" size={20} color="black"/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={style.searchIcon}>
                     <Ionicons name="ios-search" size={20} color="black"/>
                 </TouchableOpacity>

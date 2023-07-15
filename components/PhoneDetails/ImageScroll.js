@@ -6,6 +6,7 @@ const windowHeight = (Dimensions.get('window').height);
 {console.log(windowHeight, windowWidth)}
 
 export default function ImageScroll(props){
+  console.log(props.image)
   return (
     <View style={style.imageContainer}>
       <ScrollView style={{backgroundColor:'#fff'}}
@@ -14,11 +15,15 @@ export default function ImageScroll(props){
       pagingEnabled 
       snapToEnd={false} 
       onScrollAnimation>
-        {props.image.map((img,index) => (
+        {props.image[0] != null ? props.image.map((img,index) => (
           <View key={index} style={{width:windowWidth}}>
-            <Image style={style.image} source={{uri: img}}/>
+            <Image style={style.image} source={{uri: img}} resizeMode='contain'/>
           </View>
-        ))}
+        )) : (
+          <View style={{width:windowWidth}}>
+            <Image style={style.image} source={require('../../assets/images/displaySize/large.png')} resizeMode='contain'/>
+          </View>
+        )}
       </ScrollView>
     </View>
   )
@@ -27,14 +32,16 @@ export default function ImageScroll(props){
 const style = StyleSheet.create({
     imageContainer: {
       width:windowWidth,
+      height:windowHeight/2,
     },
     image: {
-      width : 250,
+      width : 360,
       height: (windowHeight/2)-10,
       alignContent:'center',
       left: (windowWidth/2)-160,
       margin: 25,
       marginTop: 0,
+      marginLeft: -20
     },
   
   })

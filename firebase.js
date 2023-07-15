@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAfhATjSu0T7Aip51NIujkPpWH-HvskpS0",
   authDomain: "puzzel-12430.firebaseapp.com",
@@ -11,13 +10,6 @@ const firebaseConfig = {
   measurementId: "G-E8LVMNE6LG"
   };
 
-  
-// !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app()
-// const auth = firebase.auth();
-
-// const db = getFirestore(app);
-// const auth = auth(app);
-
 firebase.initializeApp(firebaseConfig);
-
+export const db = firebase.firestore();
 export default firebase;

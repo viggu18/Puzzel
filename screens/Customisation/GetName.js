@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React,{useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React,{useState,useEffect} from 'react'
 import HeaderButtons from '../../components/HeaderButtons'
 import { OutlinedTextField } from 'react-native-material-textfield'
 import { windowHeight,windowWidth } from '../../components/export'
@@ -7,19 +8,43 @@ import { setPhone } from '../../src/actions/actions'
 import { useDispatch,useSelector } from 'react-redux'
 
 const GetName = ({navigation}) => {
-    const [deviceName,setDeviceName] = useState({key: 'Name',value: ''});
-    const dispatch = useDispatch()
-    const name = useSelector(state=>state.phone)
-    console.log(name)
-    const handlerSubmit = () => {
-        // if(deviceName.length>3){
-            // dispatch(setPhone(deviceName));
-            navigation.navigate('SelectDisplay');
-        // }
+    const [deviceName,setDeviceName] = useState({
+            Name: ''
+        });
+    console.log(deviceName)
+     
+    const getDevice = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('custom-device')
+          return jsonValue != null ? JSON.parse(jsonValue) : null
+        } catch(e) {
+            console.log(e)
+        }
+        console.log('Done.')
       }
-      const data = useSelector(state=>state.phone)
-      console.log(data)
+
+    const setDevice = async (value) => {
+        try {
+            await AsyncStorage.mergeItem('custom-device', JSON.stringify(deviceName))
+        } catch(e) {
+            console.log(e)
+        }  
+        console.log('Done.')
+    }
+
+    const handlerSubmit = () => {
+
+            setDevice(deviceName)
+            navigation.navigate('SelectDisplay');
+      }
     
+      useEffect(() => {
+        getDevice().then((data)=>
+         data != null ? setDeviceName({...deviceName, ['name']: data.name}): ''   
+        )
+      }, [])
+      
+
   return (
     <>
     <View style={styles.getNameContainer}>
@@ -31,13 +56,14 @@ const GetName = ({navigation}) => {
         <Text style={styles.subtitle}>PUZZEL   </Text>
         <OutlinedTextField
             label='Desired name'
+            defaultValue={deviceName.Name}
             keyboardType='default'
             containerStyle={styles.TextField}
-            onChangeText={(text)=>setDeviceName({...deviceName,['value']:text})}/>
+            onChangeText={(text)=>setDeviceName({...deviceName,['Name']:text})}/>
       </View>
       <Text style={{fontSize:10,marginLeft:windowWidth*0.05}}>The length of the name should be more than 4 characters</Text>
   </View>
-      {deviceName['value'].length>=4?(
+      {deviceName.Name.length>=4?(
           <TouchableOpacity activeOpacity={0.9} onPress={handlerSubmit}>
             <View style={styles.buttonHolder}>
               <Text style={styles.nextNavigator}>Well Done!</Text>

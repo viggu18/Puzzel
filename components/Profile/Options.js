@@ -5,9 +5,12 @@ import { windowWidth,windowHeight } from '../export'
 
 
 export default function OptionButtons(props){
+    const handler = () => {
+        props.screen == undefined ? '' : props.navigation.navigate(props.screen)
+    }
   return (
     <View style={style.OptionButtons}>
-        <TouchableOpacity onPress={props.handler} activeOpacity={0.7}>
+        <TouchableOpacity onPress={handler} activeOpacity={0.7}>
             <View style={style.contentHolder}>
             <Text style={[style.Text,{color:'black'}]}>{props.label}</Text>
             <MaterialIcons name="arrow-forward-ios" size={25} color="black" style={style.icon}/>

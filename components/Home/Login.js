@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TextInput,
-    Button,
-    TouchableOpacity,
-} from "react-native";
+import {StyleSheet,Text,View,Image,TextInput,TouchableOpacity,} from "react-native";
 import firebase from "../../firebase";
 import HeaderButtons from "../HeaderButtons";
 import { useSelector,useDispatch } from "react-redux"; 
-import { ACTION_TYPE } from "../../src/actions/global";
-import { saveUser } from "../../src/actions/actions";
+import { setUser } from "../../src/actions/actions";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const db = firebase.firestore();
 
 export default function Login({ navigation }) {
     const dispatch = useDispatch();
@@ -23,9 +17,16 @@ export default function Login({ navigation }) {
         // const user = firebase.auth().currentUser;
         // console.log(user);
         // user ? navigation.navigate("PhoneList") : '';
-    
+    const storeData = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('user', jsonValue)
+        } catch (e) {
+            console.log(e)
+        }
+    }
     const handleSignIn = () => {
-        email && password == "" ? setErrorMessage("Please enter email and password") 
+        password == "" && email == ""  ? setErrorMessage("Please enter email and password") 
         : email == "" ? setErrorMessage("Please enter valid email address") 
         : password == "" ? setErrorMessage("Please enter a valid password") :
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -34,12 +35,21 @@ export default function Login({ navigation }) {
                 .then((userCredential) => {
                 console.log("signed in with ",email);
                 const user = userCredential.user; 
-                dispatch({type:userCredential, payload:user});
-                navigation.navigate('Profile');
-                })
+                console.log(user)
+                dispatch(setUser(user));
+                storeData(user)
+                if(user.emailVerified)
+                {   
+                    storeData(user)
+                    dispatch(setUser(user));
+                    navigation.navigate("Home");
+                }else{
+                    setErrorMessage("Please verify your email address"),
+                    firebase.auth().signOut()
+                }
+              })
                 .catch((error) => {
                 const errorCode = error.code;
-                // const errorMessage = error.message;
                 setErrorMessage(error.message);
                 });
             }).catch((error) => {
@@ -49,31 +59,7 @@ export default function Login({ navigation }) {
                     console.log(errorCode,errorMessage);
                     setErrorMessage(error.message)
         });
-    
-
-
-
-
-        // firebase.auth().currentUser.sendEmailVerification()
-        // .then(() => {
-        // // Email verification sent!
-        // // ...
-        // });
-        
-        // auth.signInWithEmailAndPassword(email, password)
-        // .then((userCredential) => {
-        // console.log("signed in with ",email); 
-        // const user = userCredential.user;
-        // navigation.navigate("SelectUser");
-        // // ...
-        // })
-        // .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // }).then((error)=>{console.log(error)});
-        // console.log(email,password);
     };
-
 
     return (
         <>
@@ -88,7 +74,9 @@ export default function Login({ navigation }) {
                     style={styles.TextInput}
                     placeholder="Email"
                     placeholderTextColor="black"
-                    onChangeText={(email) => setEmail(email)}
+                    onChangeText={(email) => {
+                        setEmail(email)
+                        setErrorMessage("")}}
                 />
             </View>
             <View style={styles.inputView}>
@@ -97,11 +85,13 @@ export default function Login({ navigation }) {
                     placeholder="Password"
                     placeholderTextColor="black"
                     secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
+                    onChangeText={(password) => {
+                        setPassword(password)
+                        setErrorMessage("")}}
                 />
             </View>
             {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')}>
                 <Text style={styles.forgot_button}>Forgot Password?</Text>
             </TouchableOpacity>
             
@@ -120,7 +110,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#ffff",
+        backgroundColor: "white",
         alignItems: "center",
         justifyContent: "center",
     },
@@ -132,7 +122,8 @@ const styles = StyleSheet.create({
     },
 
     inputView: {
-        backgroundColor: "#A0A0A0",
+        elevation: 5,
+        backgroundColor: "white",
         borderRadius: 10,
         width: "70%",
         height: 45,
@@ -155,13 +146,13 @@ const styles = StyleSheet.create({
 
     loginBtn: {
         fontWeight: 'bold',
-        width: "20%",
-        borderRadius: 10,
-        height: 50,
+        width: "25%",
+        borderRadius: 20,
+        height: '8%',
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
-        backgroundColor: "#A0A0A0",
+        marginTop: 30,
+        backgroundColor: "#48C9B0",
         
     },
 

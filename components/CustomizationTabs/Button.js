@@ -5,7 +5,7 @@ import { windowWidth } from '../export'
 export default function Button(props){
   return (
         <TouchableOpacity 
-            onPress={()=>props.navigation.navigate(props.screen)} 
+            onPress={()=>props.handler} 
             style={styles.ButtonContainer}
             activeOpacity={0.7}>
             <View > 

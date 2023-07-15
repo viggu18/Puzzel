@@ -1,14 +1,33 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity,ToastAndroid } from 'react-native'
 import React from 'react'
 import { Divider } from 'react-native-elements';
+import firebase,{db} from '../firebase';
 import {Button} from '@react-native-material/core'
 import ImageScroll from '../components/PhoneDetails/ImageScroll';
 import Details from '../components/PhoneDetails/Details';
 import HeaderButtons from '../components/HeaderButtons';
 import {windowWidth, windowHeight} from '../components/export';
 
-
 export default function PhoneDetails({route,navigation}){
+  const user = firebase.auth().currentUser;
+  const ram = [
+    { label: "6 GB", value: "6GB" },
+    { label: "8 GB", value: "8GB" },
+    { label: "12 GB", value: "12GB" },
+  ];
+  
+  const storage = [
+    { label: "64 GB", value: "64GB" },
+    { label: "128 GB", value: "128GB" },
+    { label: "256 GB", value: "256GB" },
+    { label: "512 GB", value: "512GB" },
+  ];
+
+  const [storageSelection, setStorageSelection] = React.useState({
+    Memory: ram[0].value,
+    Storage: storage[0].value,
+  });
+
   let data = route.params;
   let image = [];
   {console.log(data)}
@@ -16,33 +35,50 @@ export default function PhoneDetails({route,navigation}){
     image.push(value)
   ))}
 
-  const SendToCart = () => {
-    navigation.navigate('Cart',data);
+  const AddtoCart = () => {
+    db.collection('users/'+user.email+'/cart').doc(data.Name).set({data,storageSelection})
+    .then(() => {
+      ToastAndroid.showWithGravityAndOffset('Added to Cart', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 0, 100);
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+  
+  const SendToWishlist = () => {
+    db.collection('users/'+user.email+'/wishlist').doc(data.Name).set({data,storageSelection})
+    .then(() => {
+      ToastAndroid.showWithGravityAndOffset('Added to wishlist', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 0, 100);
+    }).catch((error) => {
+      console.log(error);
+    })
   }
   return (
-    <View style={{flex:1}}>
-    <HeaderButtons title={data.Name} navigation={navigation} cartVisibility={true}/>
     <View style={style.container}>
-      <ScrollView>
+    <HeaderButtons title={data.Name} navigation={navigation} cartVisibility={true}/>
+    <ScrollView showsVerticalScrollIndicator={false}>
         <ImageScroll image={image}/>
         <Divider width={1.8}/>
-        <Details data={data} navigation={navigation}/>
-        <Button title="Customise" style={style.button} onPress={() => navigation.navigate('Tabs',data)}/>
+        <Details 
+              data={data} navigation={navigation} 
+              storageSelection={storageSelection} 
+              setStorageSelection={setStorageSelection}
+              ram={ram}
+              storage={storage}/>
       </ScrollView>
-      <View style={{flexDirection:'row'}}>
+      <View style={style.bottomButtonContainer}>
           <TouchableOpacity 
-            style={style.bottomButtonsAddtoCart} 
-            activeOpacity={0.7}> 
+            style={[style.bottomButtons]} 
+            activeOpacity={0.7}
+            onPress={AddtoCart}> 
               <Text style={{color:'black',fontWeight:'bold'}}>Add to Cart</Text>
           </TouchableOpacity>
           <TouchableOpacity 
-            style={style.bottomButtonsBuyNow} 
+            style={[style.bottomButtons,style.bottomButtonsBuyNow]} 
             activeOpacity={0.7}
-            onPress={SendToCart}> 
-              <Text style={{color:'white',fontWeight:'bold'}}>Buy Now</Text>
+            onPress={SendToWishlist}> 
+              <Text style={{color:'white',fontWeight:'bold'}}>Add to Wishlist</Text>
           </TouchableOpacity>
       </View>
-    </View>
     </View>
   )
 }
@@ -52,30 +88,22 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
   },
-  bottomButtonsAddtoCart: {
-          width: '50%',
-          height: 50,
+  bottomButtonContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+    width: windowWidth,
+    alignSelf: 'flex-end'
+  },
+  bottomButtons: {
+          width: windowWidth*0.5,
+          height: windowHeight*0.06,
           backgroundColor: '#E7E6E5',
           justifyContent: 'center',
           alignItems: 'center',
-          bottom:0,
-          shadowColor: '#171717',
   },
   bottomButtonsBuyNow: {
-    width: '50%',
-    height: 50,
     backgroundColor: 'orange',
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom:0,
-},
-button: {
-  width: '30%',
-  height: 30,
-  // position: 'absolute',
-  bottom: windowHeight * 0.06,
-  left : windowWidth * 0.68,
-  textAlign: 'center',
-  justifyContent: 'center',
-},
+  },
+
 })

@@ -4,25 +4,23 @@ import { RadioButton } from 'react-native-paper'
 import LottieView from 'lottie-react-native'
 
 export default function AddressBox(props){
-    const handler = () => {
-        props.setSelectedAddress(props.address)
-    }
+    console.log(props.address)
   return (
     <View style={style.container}>
         {!props.addressDisplay ? (
-        <TouchableOpacity activeOpacity={1} style={{flexDirection:'row'}} onPress={handler}>
+        <TouchableOpacity activeOpacity={1} style={{flexDirection:'row'}} onPress={()=>props.setSelectedAddress(props.address)}>
             <View style={{top:30}}>
             <RadioButton 
-                value={props.address.uid}
-                status={props.selectedAddress.uid === props.address.uid ? "checked" : 'unchecked'}
-                onPress={handler}
+                value={props.address.Name}
+                status={props.selectedAddress.Name === props.address.Name ? "checked" : 'unchecked'}
+                onPress={()=>props.setSelectedAddress(props.address)}
                 color='black'/>
             </View>
             <View style={style.box}>
-                <Text style={[style.text,{fontWeight:'bold',marginTop:10}]}>{props.address.name}</Text>
-                <Text style={style.text}>{props.address.house},{props.address.road}</Text>
-                <Text style={style.text}>{props.address.line3},{props.address.city},{props.address.state}-{props.address.pincode}</Text>
-                <Text style={style.text}>{props.address.mobile}</Text>
+                <Text style={[style.text,{fontWeight:'bold',marginTop:10}]}>{props.address.Name}</Text>
+                <Text style={style.text}>{props.address.HouseName},{props.address.AdditionalInfo}</Text>
+                <Text style={style.text}>{props.address.City},{props.address.State}-{props.address.Pincode}</Text>
+                <Text style={style.text}>{props.address.Phone}</Text>
             </View>
         </TouchableOpacity>) : (
             <View style={{flexDirection:'row'}}>
@@ -30,9 +28,9 @@ export default function AddressBox(props){
                 <LottieView source={require('../assets/animations/address.json')} autoPlay loop/>
             </View>
             <View style={[style.box,{left:10}]}>
-            <Text style={[style.text,{fontWeight:'bold',marginTop:10}]}>{props.address.name}</Text>
-            <Text style={style.text}>{props.address.house},{props.address.road}</Text>
-            <Text style={style.text}>{props.address.line3},{props.address.city},{props.address.state}-{props.address.pincode}</Text>
+            <Text style={[style.text,{fontWeight:'bold',marginTop:10}]}>{props.address.Name}</Text>
+            <Text style={style.text}>{props.address.HouseName},{props.address.AdditionalInfo}</Text>
+            <Text style={style.text}>{props.address.City},{props.address.State}-{props.address.Pincode}</Text>
             <Text style={style.text}>{props.address.mobile}</Text>
             </View>
             </View>

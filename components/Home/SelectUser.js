@@ -1,13 +1,9 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Button,
-    TouchableOpacity,
-} from "react-native";
+import {StyleSheet,Text,View,TouchableOpacity,} from "react-native";
 import LottieView from 'lottie-react-native';
 import firebase from '../../firebase'
+import HeaderButtons from '../HeaderButtons';
+import {windowHeight,windowWidth} from '../export';
 
 
 export default function SelectUser({navigation}) {
@@ -26,37 +22,46 @@ export default function SelectUser({navigation}) {
       });
 
     const handlePress = (props) => {
-        props == 'expert' ? navigation.navigate('PhoneList') : props == 'noob' ? navigation.navigate('PhoneList') : <></> 
+        props == 'expert' ? navigation.navigate('GenerateDesign') : props == 'noob' ? navigation.navigate('PhoneList') : <></> 
     }
     return(
-        <View>
-            <LottieView style={styles.gif} 
+        <>
+        <HeaderButtons title="Select Type" navigation={navigation}/>
+        <View style={style.container}>
+            <View style={style.gif}>
+            <LottieView  
             source={require('../../assets/animations/road.json')} autoPlay/>
-            <Text style={styles.pathTitle}>Select your path:</Text>
-            <View style={styles.userContainer}>
-                <TouchableOpacity activeOpacity={0.7} style={styles.userType} onPress={() => {handlePress('noob')}}>
-                    <View style={styles.gifUser}>
+            </View>
+            <Text style={style.pathTitle}>Select your path:</Text>
+            <View style={style.userContainer}>
+                <TouchableOpacity activeOpacity={0.7} style={style.userType} onPress={() => {handlePress('noob')}}>
+                    <View style={style.gifUser}>
                     <LottieView  
                     source={require('../../assets/animations/expert-user.json')} autoPlay/>
                     </View>
-                    <Text style={styles.userText}>Ameture User</Text>
+                    <Text style={style.userText}>Ameture User</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={styles.userType} onPress={() => {handlePress('expert')}}>
-                    <View style={styles.gifUser}>
+                <TouchableOpacity activeOpacity={0.7} style={style.userType} onPress={() => {handlePress('expert')}}>
+                    <View style={style.gifUser}>
                     <LottieView  
                     source={require('../../assets/animations/server-and-user.json')} autoPlay/>
                     </View>
-                    <Text style={styles.userText}>Expert User</Text>
+                    <Text style={style.userText}>Expert User</Text>
                 </TouchableOpacity>
             </View>
         </View>
+        </>
     );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
     gif: {
-        width: 200,
-        height: 200,
+        width: windowWidth,
+        height: windowHeight*0.3,
         alignSelf: 'center',
         marginTop: 50,
         marginBottom: 50,
@@ -68,26 +73,29 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     userContainer: {
+        width: windowWidth,
+        height: windowHeight*0.5,
         flexDirection: 'row',
-        marginRight: 20,
-        marginLeft: 20,
-        marginBottom: 10,
-        justifyContent: 'space-between',
     },
     userType:{
         backgroundColor: '#C8C5C1',
         borderRadius:5,
         shadowColor: 'grey',
         elevation: 5,
-        height: 250,
-        width: 180,
+        height: windowHeight*0.3,
+        width: windowWidth*0.4,
         alignItems:'center',
+        margin: windowWidth*0.05,
     },
     gifUser: {
         height: 60,
         width:60,
         marginTop: 10,
         borderRadius: 20,
+        position: 'relative',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     userText: {
         fontSize:18,

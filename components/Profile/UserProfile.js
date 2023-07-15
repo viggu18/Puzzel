@@ -1,27 +1,35 @@
 import { View, Text,StyleSheet,TouchableOpacity, TextInput } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import ProfilePicture from 'react-native-profile-picture'
 import { Divider } from '@react-native-material/core';
 import firebase from '../../firebase';
 
 export default function UserProfile(props) {
   const user = firebase.auth().currentUser;
-    const [edit,setEdit] = React.useState(true);  //true means edit mode is on
+  console.log(props.data)
+    const [edit,setEdit] = useState(true);  //true means edit mode is on
+    const [profilePicture,setProfilePicture] = useState('')
+
+    const getProfilePicture = async () => {
+      const storage = firebase.storage();
+      const storageRef = storage.ref();
+      const profileRef = storageRef.child('ProfilePictures');
+      const url = await profileRef.child(user.email+'.jpg').getDownloadURL();
+      setProfilePicture(url);
+    }
+    getProfilePicture();
+
   return (
     <>
     <View style={style.container}>
       <View style={style.profile}>
         <TouchableOpacity style={style.imageContainer} onPress={props.ImagePickHandler}>
-          {props.data.photoURL ? (<ProfilePicture width={120} height={120} style={style.userImage} 
-            isPicture={true} 
-            shape='circle' 
-            requirePicture={require('../../assets/images/default.jpg')}
-            />) 
-            : (<ProfilePicture width={80} height={80} style={style.userImage} 
-            isPicture={true} 
-            shape='circle' 
-            URLPicture={props.data.photoURL}
-            />)}
+        <ProfilePicture
+          isPicture={false} width={110} height={110} style={style.userImage} 
+          user="User"
+          shape='circle'
+          backgroundColor='grey'
+          />
         </TouchableOpacity>
         <View style={style.detailContainer}>
         <Text style={style.displayName}>{props.data.displayName}</Text>
@@ -54,10 +62,6 @@ const style = StyleSheet.create({
     text: {
         fontSize: 10,
         color: 'grey',
-    },
-    imageContainer: {
-        marginTop: 30,
-        marginBottom: 50
     },
     detailContainer: {
         margin : 30,

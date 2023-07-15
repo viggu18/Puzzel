@@ -9,7 +9,7 @@ export default function AdressList(props){
   return (
     <SafeAreaView style={style.radioContainer}>
         <ScrollView style={style.scrollView} showsVerticalScrollIndicator={false}>
-            <TouchableOpacity activeOpacity={0.7} onPress={props.formDirect}>
+            <TouchableOpacity activeOpacity={0.7} onPress={()=>props.navigation.navigate('AddressForm')}>
                 <View style={style.NewAddressStyle}>
                     <AntDesign name="plussquare" size={20} color="black" style={{margin:10}}/>
                     <Text style={{fontSize: 18,fontWeight: 'bold',color: 'black'}}>Add New Address</Text>
