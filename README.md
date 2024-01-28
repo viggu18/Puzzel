@@ -1,7 +1,17 @@
-# puzzel_rn
+# Puzzel - Customied phone for your needs
 
-A React-Native E-Commerce Application
+React-Native E-Commerce Application. Focused on providing custom mobile phones to it's user.
 
-You need to do a lot of library installations 
+Assuming you have already installed node.
 
-The ReadMe will be updated after the completion of the project 
+Setup React Native Expo in your system. 
+https://reactnative.dev/docs/environment-setup
+
+Install Android Studio and libraries.
+
+Clone the repository and run  `npm i` to install all the dependencies.
+
+To run the project use the command `npx expo start`
+
+The project is still incomplete but will give you a rough idea about the concept.
+Enjoy.
